@@ -47,6 +47,8 @@
 
 #define WRITE_USER_REG  0xE6
 #define READ_USER_REG  0xE7
+#define WRITE_HEATER_REG  0x51
+#define READ_HEATER_REG  0x11
 #define SOFT_RESET  0xFE
 
 #define HTRE        0x02
@@ -76,6 +78,7 @@ public:
 	float getTempF();
 	void  heaterOn();
 	void  heaterOff();
+	void  changeHeaterPower(uint8_t i);
 	void  changeResolution(uint8_t i);
 	void  reset();
 	uint8_t  checkID();
@@ -87,6 +90,8 @@ private:
 	uint16_t makeMeasurment(uint8_t command);
 	void     writeReg(uint8_t value);
 	uint8_t  readReg();
+    void     writeHeaterReg(uint8_t value);
+    uint8_t  readHeaterReg();
 };
 
 #endif

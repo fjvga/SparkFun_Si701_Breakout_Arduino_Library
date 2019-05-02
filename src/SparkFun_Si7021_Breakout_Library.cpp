@@ -138,7 +138,7 @@ void Weather::changeResolution(uint8_t i)
 
 	uint8_t regVal = readReg();
 	// zero resolution bits
-	regVal &= 0b011111110;
+	regVal &= 0b01111110;
 	switch (i) {
 	  case 1:
 	    regVal |= 0b00000001;
@@ -154,6 +154,78 @@ void Weather::changeResolution(uint8_t i)
 	}
 	// write new resolution settings to the register
 	writeReg(regVal);
+}
+
+void  Weather::changeHeaterPower(uint8_t i){
+    //TODO fill the function
+    // Changes to resolution of ADDRESS measurements.
+    // Set i to:
+    // D3   D2  D1  D0      Heater Current
+    // 0    0   0   0       3.090 mA
+    // 0    0   0   1       9.180 mA
+    // 0    0   1   0       15.24 mA
+    // .............................
+    // 0    1   0   0       27.39 mA
+    // .............................
+    // 1    0   0   0       51.69 mA
+    // .............................
+    // 1    1   1   1       94.20 mA
+    // .............................
+    //
+
+    uint8_t regVal = readHeaterReg();
+    // zero resolution bits
+    regVal &= 0b11110000;
+    switch (i) {
+        case 1:
+            regVal |= 0b00000001;
+            break;
+        case 2:
+            regVal |= 0b00000010;
+            break;
+        case 3:
+            regVal |= 0b00000011;
+        case 4:
+            regVal |= 0b00000100;
+            break;
+        case 5:
+            regVal |= 0b00000101;
+            break;
+        case 6:
+            regVal |= 0b00000110;
+            break;
+        case 7:
+            regVal |= 0b00000111;
+            break;
+        case 8:
+            regVal |= 0b00001000;
+            break;
+        case 9:
+            regVal |= 0b00001001;
+        case 10:
+            regVal |= 0b00001010;
+            break;
+        case 11:
+            regVal |= 0b00001011;
+            break;
+        case 12:
+            regVal |= 0b00001100;
+            break;
+        case 13:
+            regVal |= 0b00001101;
+            break;
+        case 14:
+            regVal |= 0b00001110;
+            break;
+        case 15:
+            regVal |= 0b00001111;
+            break;
+        default:
+            regVal |= 0b00000000;
+            break;
+    }
+    // write new resolution settings to the register
+    writeHeaterReg(regVal);
 }
 
 void Weather::reset()
@@ -230,3 +302,22 @@ uint8_t Weather::readReg()
 	uint8_t regVal = Wire.read();
 	return regVal;
 }
+
+void     Weather::writeHeaterReg(uint8_t value){
+    //TODO fill the function
+    // Write to user register on ADDRESS
+    Wire.beginTransmission(ADDRESS);
+    Wire.write(WRITE_HEATER_REG);
+    Wire.write(value);
+    Wire.endTransmission();
+}
+uint8_t  Weather::readHeaterReg();{
+    //TODO fill the function
+    // Read from user register on ADDRESS
+    Wire.beginTransmission(ADDRESS);
+    Wire.write(READ_HEATER_REG);
+    Wire.endTransmission();
+    Wire.requestFrom(ADDRESS,1);
+    uint8_t regVal = Wire.read();
+}
+
